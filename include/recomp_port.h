@@ -7,7 +7,6 @@
 #include <utility>
 #include <vector>
 #include <unordered_map>
-#include <span>
 #include <unordered_set>
 #include <filesystem>
 #include "rabbitizer.hpp"
@@ -53,7 +52,8 @@ namespace RecompPort {
         uint32_t vram;
         uint32_t size;
 
-        ManualFunction(const std::string& func_name, std::string section_name, uint32_t vram, uint32_t size) : func_name(func_name), section_name(std::move(section_name)), vram(vram), size(size) {}
+        ManualFunction(const std::string& func_name, std::string section_name, uint32_t vram, uint32_t size) 
+            : func_name(func_name), section_name(std::move(section_name)), vram(vram), size(size) {}
     };
 
     struct Config {
@@ -89,7 +89,7 @@ namespace RecompPort {
         std::vector<uint32_t> entries;
 
         JumpTable(uint32_t vram, uint32_t addend_reg, uint32_t rom, uint32_t lw_vram, uint32_t addu_vram, uint32_t jr_vram, std::vector<uint32_t>&& entries)
-                : vram(vram), addend_reg(addend_reg), rom(rom), lw_vram(lw_vram), addu_vram(addu_vram), jr_vram(jr_vram), entries(std::move(entries)) {}
+            : vram(vram), addend_reg(addend_reg), rom(rom), lw_vram(lw_vram), addu_vram(addu_vram), jr_vram(jr_vram), entries(std::move(entries)) {}
     };
 
     struct AbsoluteJump {
@@ -110,7 +110,7 @@ namespace RecompPort {
         bool stubbed;
 
         Function(uint32_t vram, uint32_t rom, std::vector<uint32_t> words, std::string name, ELFIO::Elf_Half section_index, bool ignored = false, bool reimplemented = false, bool stubbed = false)
-                : vram(vram), rom(rom), words(std::move(words)), name(std::move(name)), section_index(section_index), ignored(ignored), reimplemented(reimplemented), stubbed(stubbed) {}
+            : vram(vram), rom(rom), words(std::move(words)), name(std::move(name)), section_index(section_index), ignored(ignored), reimplemented(reimplemented), stubbed(stubbed) {}
     };
 
     enum class RelocType : uint8_t {
@@ -179,6 +179,7 @@ namespace RecompPort {
 
     bool analyze_function(const Context& context, const Function& function, const std::vector<rabbitizer::InstructionCpu>& instructions, FunctionStats& stats);
     bool recompile_function(const Context& context, const Config& config, const Function& func, std::ofstream& output_file, std::span<std::vector<uint32_t>> static_funcs, bool write_header);
+
 }
 
 #endif
